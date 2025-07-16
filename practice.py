@@ -1,19 +1,20 @@
 import firebase_admin
+import os
 from firebase_admin import credentials, db as firebase_db
 from sqlalchemy import create_engine, Column, String, Float, DateTime, Integer, Identity
 from sqlalchemy.orm import declarative_base, sessionmaker
 from datetime import datetime
 from threading import Thread
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # --- Firebase Initialization ---
 cred = credentials.Certificate("firebase_credentials.json")  # Your Firebase credentials JSON
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://ansh-project-a4ebc-default-rtdb.firebaseio.com'  # Replace with your Firebase DB URL
-})
+firebase_admin.initialize_app(cred, {"firebase_URL": os.getenv("firebase_URL")})
 
 # --- PostgreSQL Setup ---
-DATABASE_URL = "postgresql://postgres:Nomadic1@localhost/students"  # Replace accordingly
-engine = create_engine(DATABASE_URL)
+engine = create_engine(os.getenv("DATABASE_URL"))
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
 
